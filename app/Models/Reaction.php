@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Reaction extends Model
 {
     use HasFactory;
+
+    public function posts()
+    {
+        return $this->morphedByMany(Post::class, 'taggable');
+    }
+
+    public function photos()
+    {
+        return $this->morphedByMany(Photo::class, 'taggable');
+    }
 }

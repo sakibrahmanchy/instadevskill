@@ -29,6 +29,9 @@ class CreateReactablesTable extends Migration
      */
     public function down()
     {
+        Schema::table('reactables', function (Blueprint $table) {
+            $table->dropForeign(['reaction_id']);
+        });
         Schema::dropIfExists('reactables');
     }
 }
