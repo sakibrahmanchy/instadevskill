@@ -16,6 +16,6 @@ class Tag extends Model
 
     public function photos()
     {
-        return $this->morphedByMany(Photo::class, 'taggable');
+        return $this->morphedByMany(Image::class, 'taggable');
     }
 }
