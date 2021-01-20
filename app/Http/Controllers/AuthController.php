@@ -12,15 +12,20 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'date_of_birth' => 'required',
             'username' => 'required',
             'gender' => 'required',
-            'phone' => 'required'
+            'phone' => 'required|unique:users,phone'
         ]);
 
-        $user = User::create($request->all());
+        $user = User::create(array_merge(
+            $request->except('password'),
+            [
+                'password' => bcrypt($request->password),
+            ]
+        ));
 
         return response()->json($user);
     }
@@ -41,7 +46,7 @@ class AuthController extends Controller
             $token = $user->createToken($user->email.'-'.now());
 
             return response()->json([
-                'token' => $token->access_token,
+                'token' => $token->accessToken,
             ]);
         } else {
             return response()->json([
