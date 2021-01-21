@@ -37,11 +37,7 @@ class UserController extends Controller
 
     public function followers(Request $request)
     {
-        $followers = DB::table('users')
-            ->select('*')
-            ->join('follows', 'users.id', '=', 'follows.user_id')
-            ->where('users.id', '=', $request->user()->id)
-            ->get();
+        $followers = User::with('follower')->get();
 
         // Fetch Name, emails and other details of all follwers
 
