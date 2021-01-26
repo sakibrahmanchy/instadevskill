@@ -2,24 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follow;
-use App\Models\User;
+use App\Repository\Interfaces\FollowRepositoryInterface;
+use App\Repository\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    private $userRepo;
+    private $followRepo;
+    public function __construct(UserRepositoryInterface $userRepository,
+                                FollowRepositoryInterface $followRepository)
+    {
+        $this->userRepo = $userRepository;
+        $this->followRepo = $followRepository;
+    }
+
     public function follow(Request $request)
     {
         $this->validate($request, [
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $user = User::where('id', $request->user_id)->first();
+        $user = $this->userRepo->find($request->user_id);
 
         if ($user->account_type === 1) {
-            $followed = Follow::create([
+            $followed = $this->followRepo->create([
                 'user_id' => $request->user_id,
                 'follower_id' => Auth::id(),
             ]);
@@ -34,18 +42,15 @@ class UserController extends Controller
         }
     }
 
-
     public function followers(Request $request)
     {
-        $followers = User::with('follower')->get();
+        $followers = $this->followRepo->with(['user' => function($query) {
+            $query->select('id', 'username', 'name', 'email');
+        }])
+        ->where('user_id', $request->user()->id)
+        ->get()
+        ->pluck('user');
 
-        // Fetch Name, emails and other details of all follwers
-
-        dd($followers);
-        // Inefficient way
-//        return $request->user()->followers->map(function($follower) {
-//            return User::where('id', $follower->follower_id)->get();
-//        });
+        return response()->json(['followers' => $followers]);
     }
-
 }
