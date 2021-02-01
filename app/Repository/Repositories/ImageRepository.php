@@ -16,7 +16,6 @@ class ImageRepository extends BaseRepository implements ImageRepositoryInterface
         $this->model = $model;
     }
 
-
     public function uploadImageToDrive($folderName, $imageContent)
     {
         $randomlyGeneratedName = Str::uuid();
