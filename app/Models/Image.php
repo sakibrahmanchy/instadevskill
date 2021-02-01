@@ -9,6 +9,8 @@ class Image extends Model
 {
     use HasFactory;
 
+    public $fillable = ['url', 'imageable_type', 'imageable_id'];
+
     public function photoable()
     {
         return $this->morphTo();

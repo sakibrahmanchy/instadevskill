@@ -33,6 +33,8 @@ Route::middleware(['auth:api', 'verified'])->group(function() {
         return $request->user();
     });
 
+
+    Route::post('test-image-upload', [\App\Http\Controllers\ImageController::class, 'storeTestImage']);
     Route::post('follow', [\App\Http\Controllers\UserController::class, 'follow']);
     Route::post('unfollow', [\App\Http\Controllers\UserController::class, 'unfollow']);
     Route::get('followers', [\App\Http\Controllers\UserController::class, 'followers']);
