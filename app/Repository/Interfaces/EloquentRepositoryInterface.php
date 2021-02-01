@@ -10,7 +10,7 @@ interface EloquentRepositoryInterface {
     public function update($id, $attributes): Model;
     public function destroy($id): bool;
     public function find($id): Model;
-    public function where($where): Builder;
-    public function with($with): Builder;
+    public function where(...$where): Builder;
+    public function with(...$with): Builder;
     public function get(): Collection;
 }

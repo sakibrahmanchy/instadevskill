@@ -42,6 +42,37 @@ class UserController extends Controller
         }
     }
 
+    public function unfollow(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $currentUserId = Auth::id();
+
+        $followerFollowee = $this->followRepo
+            ->where("user_id", $request->user_id)
+            ->where('follower_id', $currentUserId);
+
+        if ($followerFollowee->first()) {
+            try {
+                $followerFollowee->delete();
+                return response()->json([
+                    'message' => "You no longer follow user $request->user_id"
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => "Something wrong happened. Try again later!"
+                ], 200);
+            }
+
+        }
+
+        return response()->json([
+            'message' => "You cannot unfollow $request->user_id, because you don't follow the user yet!"
+        ]);
+    }
+
     public function followers(Request $request)
     {
         $followers = $this->followRepo->with(['user' => function($query) {

@@ -34,14 +34,14 @@ class BaseRepository implements EloquentRepositoryInterface {
         return $this->model->findOrFail($id);
     }
 
-    public function where($where): Builder
+    public function where(...$where): Builder
     {
-        return $this->model->where($where);
+        return $this->model->where(...$where);
     }
 
-    public function with($with): Builder
+    public function with(...$with): Builder
     {
-        return $this->model->with($with);
+        return $this->model->with(...$with);
     }
 
     public function get(): Collection

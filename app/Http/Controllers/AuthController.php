@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repository\Interfaces\UserRepositoryInterface;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,8 @@ class AuthController extends Controller
             ]
         ));
 
+        event(new Registered($user));
+
         return response()->json($user);
     }
 
@@ -56,7 +59,7 @@ class AuthController extends Controller
             ]);
         } else {
             return response()->json([
-               'message' => "Invalid email or password",
+                'message' => "Invalid email or password",
             ]);
         }
     }
