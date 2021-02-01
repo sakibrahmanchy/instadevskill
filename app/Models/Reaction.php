@@ -11,11 +11,6 @@ class Reaction extends Model
 
     public function posts()
     {
-        return $this->morphedByMany(Post::class, 'taggable');
-    }
-
-    public function photos()
-    {
-        return $this->morphedByMany(Photo::class, 'taggable');
+        return $this->morphedByMany(Post::class, 'reactable');
     }
 }

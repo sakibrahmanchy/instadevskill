@@ -14,13 +14,13 @@ class CreateFollowsTable extends Migration
     public function up()
     {
         Schema::create('follows', function (Blueprint $table) {
-            $table->unique(['user_id', 'follower_id']);
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
             $table->foreignId('follower_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
+            $table->unique(['user_id', 'follower_id']);
             $table->timestamps();
         });
     }
@@ -33,8 +33,9 @@ class CreateFollowsTable extends Migration
     public function down()
     {
         Schema::table('follows', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['follower_id']);
             $table->dropUnique(['user_id', 'follower_id']);
-            $table->dropForeign(['user_id', 'follower_id']);
         });
         Schema::dropIfExists('follows');
     }

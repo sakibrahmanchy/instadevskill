@@ -21,10 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->date('date_of_birth');
             $table->string('username');
-            $table->text('bio');
+            $table->text('bio')->nullable();
             $table->string('gender');
             $table->string('phone');
-            $table->string('account_type');
+            $table->tinyInteger('account_type')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
